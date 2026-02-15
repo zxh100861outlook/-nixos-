@@ -2,11 +2,11 @@
 
 {
   imports = [ ./hardware-configuration.nix ];
-
-  # Bootloader（UEFI 默认）
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
+  # 防止efi被写爆
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.device = "nodev";
   # 主机名与网络
   networking.hostName = "nixos";                  # 改成你喜欢的
   networking.networkmanager.enable = true;
@@ -61,6 +61,7 @@ nix.settings = {
 
   environment.systemPackages = with pkgs; [
   #基本工具
+    gcc			#编译器
     xev			#键值对应
     btop
     htop
@@ -82,12 +83,17 @@ nix.settings = {
     pkgs.flameshot	#截图
     pkgs.cava		#把音乐/音频实时转成终端里的彩色频谱条/波形图
     #typora		#md文档编辑器
+    wineWowPackages.stable	#为运行exe应用
+    pkgs.obs-studio		#录屏软件
     spotify		#音乐
     sl			#小火车
     #压缩包
     unzip
     zip
+    rar
+    unrar
     #互联网
+    pkgs. motrix		#种子下载器
     firefox
     pkgs.microsoft-edge
     #gtk
